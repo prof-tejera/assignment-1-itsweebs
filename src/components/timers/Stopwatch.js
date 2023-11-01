@@ -20,7 +20,7 @@ const Stopwatch = () => {
                 setTime((prevTime) => prevTime + 1); //increase time by 1 every second
             }, 1000);
         } else if (time === 150) {
-            //if time is 2m 30s, set state to false
+            //if time is 2m 30s, stop the timer
             setIsRunning(false);
         }
         console.log (time, isRunning);

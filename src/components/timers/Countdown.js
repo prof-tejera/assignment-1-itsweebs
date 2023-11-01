@@ -20,7 +20,7 @@ const Countdown = () => {
                 setTime((prevTime) => prevTime - 1); //decrease time by 1 every second
             }, 1000);
         } else if (time === 0) {
-            //if time is 0, set state to false
+            //if time is 0, stop the timer
             setIsRunning(false);
         }
         console.log (time, isRunning);

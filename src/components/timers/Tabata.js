@@ -43,9 +43,8 @@ const Tabata = () => {
                 setRemainingTime(workTime);
             }
         }
-        //if the timer is running, time ran out, and all rounds are done, stop the timer
-        else if (isRunning && remainingTime === 0 && currentRound === rounds) {
-            clearInterval(interval);
+        //if time runs out and all rounds are done, stop the timer
+        else if (remainingTime === 0 && currentRound === rounds) {
             setIsRunning(false);
         }
 
@@ -73,6 +72,13 @@ const Tabata = () => {
         if (isWorkTime && currentRound === rounds) {
             setIsRunning(false);
         }
+    };
+
+    //function to end the timer
+    const endTimer = () => {
+        setRemainingTime(0);
+        setCurrentRound(rounds);
+        setIsRunning(false);
     };
 
     //handle changes in work time input
@@ -116,11 +122,12 @@ const Tabata = () => {
             <DisplayTime>
                 {formatTime(remainingTime)}
             </DisplayTime>
-            <DisplayRounds currentRound={currentRound} totalRounds={rounds} />
+            <DisplayRounds text={isWorkTime ? `Round ${currentRound} of ${rounds}` : "Rest"} />
             <Panel>
                 <Button label={isRunning ? 'Pause' : 'Start'} onClick={startPauseTimer} />
                 <Button label="Reset" onClick={resetTimer} />
                 <Button label="Fast Forward" onClick={fastForwardTimer} />
+                <Button label="End" onClick={endTimer} />
             </Panel>
         </div>
     );

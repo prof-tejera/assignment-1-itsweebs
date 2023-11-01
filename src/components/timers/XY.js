@@ -9,6 +9,8 @@ import { formatTime } from "../../utils/helpers.js";
 const XY = () => {
     //state to keep track of time in seconds
     const [time, setTime] = useState(60);
+    //state to keep track of user input in minutes
+    const [minutes, setMinutes] = useState(1);
     //state to keep track of the total number of rounds
     const [rounds, setRounds] = useState(10);
     //state to keep track of the current round
@@ -31,7 +33,7 @@ const XY = () => {
             setCurrentRound((prevRound) => prevRound + 1);
             setTime(60); //reset time
         }
-        //if the time runs out and all rounds are completed, set state to false
+        //if the time runs out and all rounds are completed, stop the timer
         else if (time === 0 && currentRound === rounds) {
             setIsRunning(false);
         }
@@ -42,6 +44,9 @@ const XY = () => {
 
     //function to start or pause the timer
     const startPauseTimer = () => {
+        if (!isRunning) {
+            setTime(minutes * 60);
+        }
         setIsRunning(isRunning => !isRunning);
     };
 
@@ -54,6 +59,15 @@ const XY = () => {
 
     //function to forward to end of round
     const fastForwardTimer = () => {
+        if (currentRound < rounds) {
+            setTime(0);
+        } else {
+            setIsRunning(false);
+        }
+    };
+
+    //function to end the timer
+    const endTimer = () => {
         setTime(0);
         setCurrentRound(rounds);
         setIsRunning(false);
@@ -63,7 +77,7 @@ const XY = () => {
     const handleXChange = (e) => {
         const newValue = Math.max(0, parseInt(e.target.value, 10));
         if (!isNaN(newValue)) {
-            setTime(newValue * 60); //convert minutes to seconds
+            setMinutes(newValue);
         }
     };
 
@@ -79,17 +93,18 @@ const XY = () => {
     return (
         <div>
             <Panel>
-                <Input label="Set minutes" value={time / 60} onChange={handleXChange} />
-                <Input label="Set rounds" value={rounds} onChange={handleYChange} />
+            <Input label="Set minutes" value={minutes} onChange={handleXChange} />
+            <Input label="Set rounds" value={rounds} onChange={handleYChange} />
             </Panel>
             <DisplayTime>
                 {formatTime(time)}
             </DisplayTime>
-            <DisplayRounds currentRound={currentRound} totalRounds={rounds} />
+            <DisplayRounds text={`Round ${currentRound} of ${rounds}`} />
             <Panel>
                 <Button label={isRunning ? 'Pause' : 'Start'} onClick={startPauseTimer} />
                 <Button label="Reset" onClick={resetTimer} />
                 <Button label="Fast Forward" onClick={fastForwardTimer} />
+                <Button label="End" onClick={endTimer} />
             </Panel>
         </div>
     );

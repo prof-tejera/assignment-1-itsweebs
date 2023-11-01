@@ -1,9 +1,9 @@
 import React from 'react';
 
-const DisplayRounds = ({ currentRound, totalRounds }) => {
+const DisplayRounds = ({ text }) => {
   return (
     <div>
-      Round: {currentRound}/{totalRounds}
+      {text}
     </div>
   );
 };
