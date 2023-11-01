@@ -1,12 +1,11 @@
-const Button = ({ active, text, ...btnProps }) => {
-    return (
-      <button
-        className={active ? "Default-button Default-button-active" : "Default-button"}
-        {...btnProps}
-      >
-        {text}
-      </button>
-    );
-  };
+import React from 'react';
 
-  export default Button;
+const Button = ({ label, onClick }) => {
+  return (
+    <button className="button" onClick={onClick}>
+      {label}
+    </button>
+  );
+};
+
+export default Button;
