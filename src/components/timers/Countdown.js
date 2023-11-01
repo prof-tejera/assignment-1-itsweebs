@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Panel from "../generic/Panel.js";
 import Button from "../generic/Button.js";
 import DisplayTime from "../generic/DisplayTime.js";
+import { formatTime } from "../../utils/helpers.js";
 
 const Countdown = () => {
     //state to keep track of time
@@ -18,25 +19,20 @@ const Countdown = () => {
             interval = setInterval(() => {
                 setTime((prevTime) => prevTime - 1); //decrease time by 1 every second
             }, 1000);
-        } else if (!isRunning || time === 0) {
-            // If timer is not running or time is 0, clear interval
-            clearInterval(interval);
+        } else if (time === 0) {
+            //if time is 0, set state to false
+            setIsRunning(false);
         }
+        console.log (time, isRunning);
 
         //clear interval when component unmounts or when it's running
         return () => clearInterval(interval);
     }, [isRunning, time]);
 
-    //format time in minutes and seconds
-    const formatTime = (time) => {
-        const minutes = Math.floor(time / 60);
-        const seconds = time % 60;
-        return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-    };
 
     //function to start or pause the timer
     const startPauseTimer = () => {
-        setIsRunning(!isRunning);
+        setIsRunning(isRunning => !isRunning);
     };
 
     //function to reset the timer
@@ -55,7 +51,7 @@ const Countdown = () => {
     return (
         <div>
             <DisplayTime>
-                <span>{formatTime(time)}</span>
+                {formatTime(time)}
             </DisplayTime>
             <Panel>
                 <Button label={isRunning ? 'Pause' : 'Start'} onClick={startPauseTimer} />

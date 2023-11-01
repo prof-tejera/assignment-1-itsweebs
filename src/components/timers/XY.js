@@ -4,6 +4,7 @@ import Button from "../generic/Button.js";
 import DisplayTime from "../generic/DisplayTime.js";
 import Input from "../generic/Input.js";
 import DisplayRounds from "../generic/DisplayRounds.js";
+import { formatTime } from "../../utils/helpers.js";
 
 const XY = () => {
     //state to keep track of time in seconds
@@ -24,31 +25,24 @@ const XY = () => {
             interval = setInterval(() => {
                 setTime((prevTime) => prevTime - 1);
             }, 1000);
-        } 
+        }
         //if time runs out and there are more rounds to go, move to the next round
         else if (isRunning && time === 0 && currentRound < rounds) {
             setCurrentRound((prevRound) => prevRound + 1);
             setTime(60); //reset time
-        } 
-        //if the time runs out and all rounds are completed, clear the interval
-        else if (!isRunning || (time === 0 && currentRound === rounds)) {
-            clearInterval(interval);
+        }
+        //if the time runs out and all rounds are completed, set state to false
+        else if (time === 0 && currentRound === rounds) {
+            setIsRunning(false);
         }
 
         //clear the interval when the component unmounts or timer stops
         return () => clearInterval(interval);
-    }, [isRunning, time, currentRound, rounds]); // Dependencies for useEffect.
-
-    //format time in minutes and seconds
-    const formatTime = (time) => {
-        const minutes = Math.floor(time / 60);
-        const seconds = time % 60;
-        return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-    };
+    }, [isRunning, time, currentRound, rounds]); 
 
     //function to start or pause the timer
     const startPauseTimer = () => {
-        setIsRunning(!isRunning);
+        setIsRunning(isRunning => !isRunning);
     };
 
     //function to reset the timer
@@ -85,11 +79,11 @@ const XY = () => {
     return (
         <div>
             <Panel>
-                <Input label="Set minutes" value={time / 60} onChange={handleXChange} />
-                <Input label="Set rounds" value={rounds} onChange={handleYChange} />
+                <Input disabled={true} label="Set minutes" value={time / 60} onChange={handleXChange} />
+                <Input disabled={true} label="Set rounds" value={rounds} onChange={handleYChange} />
             </Panel>
             <DisplayTime>
-                <span>{formatTime(time)}</span>
+                {formatTime(time)}
             </DisplayTime>
             <DisplayRounds currentRound={currentRound} totalRounds={rounds} />
             <Panel>
