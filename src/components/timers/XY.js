@@ -10,7 +10,7 @@ const XY = () => {
     //state to keep track of time in seconds
     const [time, setTime] = useState(60);
     //state to keep track of the total number of rounds
-    const [rounds, setRounds] = useState(3);
+    const [rounds, setRounds] = useState(10);
     //state to keep track of the current round
     const [currentRound, setCurrentRound] = useState(1);
     //state to determine if the timer is running
@@ -79,8 +79,8 @@ const XY = () => {
     return (
         <div>
             <Panel>
-                <Input disabled={true} label="Set minutes" value={time / 60} onChange={handleXChange} />
-                <Input disabled={true} label="Set rounds" value={rounds} onChange={handleYChange} />
+                <Input label="Set minutes" value={time / 60} onChange={handleXChange} />
+                <Input label="Set rounds" value={rounds} onChange={handleYChange} />
             </Panel>
             <DisplayTime>
                 {formatTime(time)}
