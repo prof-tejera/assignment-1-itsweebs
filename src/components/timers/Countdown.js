@@ -51,7 +51,7 @@ const Countdown = () => {
         setIsRunning(false);
     };
 
-    //render the countdown timer and control buttons
+    //render timer and control buttons
     return (
         <div>
             <DisplayTime>

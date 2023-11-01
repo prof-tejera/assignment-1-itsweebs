@@ -51,7 +51,7 @@ const Stopwatch = () => {
         setIsRunning(false);
     };
 
-    //render the stopwatch and control buttons
+    //render timer and control buttons
     return (
         <div>
             <DisplayTime>
