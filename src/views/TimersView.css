@@ -8,12 +8,14 @@
   }
   
   .Timer {
-    border: 1px solid gray;
-    border-radius: 8px;
+    background-color: #000;
+    color: #FFF;
+    border-radius: 16px;
     padding: 20px;
-    font-size: 1.5rem;
+    font-size: 16px;
     height: 400px;
     margin-top: 80px;
+    padding: 24px;
   }
   
   .TimerTitle {

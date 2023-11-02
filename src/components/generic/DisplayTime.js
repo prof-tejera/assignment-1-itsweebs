@@ -1,7 +1,8 @@
 import React from 'react';
+import "./DisplayTime.css";
 
 const DisplayTime = ({ children }) => {
-  return <h1 className="displayTime">{children}</h1>;
+  return <div className="displayTime">{children}</div>;
 };
 
 export default DisplayTime;

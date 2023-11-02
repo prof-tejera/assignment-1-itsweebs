@@ -1,10 +1,11 @@
 import React from 'react';
+import "./Input.css";
 
 const Input = ({ label, ...props }) => {
   return (
-    <div>
-      <label>{label}: </label>
-      <input type="number" {...props} />
+    <div className="input-container">
+      <label className="input-label">{label}:</label>
+      <input className="input-field" type="number" {...props} />
     </div>
   );
 };
