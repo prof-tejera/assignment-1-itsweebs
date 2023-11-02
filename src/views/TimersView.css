@@ -1,0 +1,23 @@
+.Timers {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+  
+  .Timer {
+    border: 1px solid gray;
+    border-radius: 8px;
+    padding: 20px;
+    font-size: 1.5rem;
+    height: 400px;
+    margin-top: 80px;
+  }
+  
+  .TimerTitle {
+    margin-bottom: 10px;
+  }
+  
+  

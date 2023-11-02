@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import Panel from "../generic/Panel.js";
+import Input from "../generic/Input.js";
 import Button from "../generic/Button.js";
 import DisplayTime from "../generic/DisplayTime.js";
-import Input from "../generic/Input.js";
 import DisplayRounds from "../generic/DisplayRounds.js";
 import { formatTime } from "../../utils/helpers.js";
 
