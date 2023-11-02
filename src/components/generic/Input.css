@@ -1,12 +1,13 @@
 input {
     display: block;
-    background-color: #111;
+    background-color: #1f1f1f;
     border: 1px solid #333;
     padding: 8px 16px 8px 16px;
     color: #f0f0f0;
     border-radius: 8px;
     margin: 4px;
-    font-size: 32px;
+    font-size: 28px;
+    text-align: center;
 }
 
 .input-container {
@@ -21,6 +22,7 @@ input {
 .input-label {
     width: auto;
     margin-right: 8px;
+    font-size: 14px;
 }
 
 .input-field {

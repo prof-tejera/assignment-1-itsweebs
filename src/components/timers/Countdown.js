@@ -4,6 +4,8 @@ import Input from "../generic/Input.js";
 import Button from "../generic/Button.js";
 import DisplayTime from "../generic/DisplayTime.js";
 import { formatTime, displayInputTime } from "../../utils/helpers.js";
+import { faPlay, faPause, faRedo, faStepForward } from '@fortawesome/free-solid-svg-icons';
+
 
 const Countdown = () => {
     //state to keep track of time
@@ -85,11 +87,11 @@ const Countdown = () => {
             </DisplayTime>
             <Panel className="control-panel">
                 <div className="start-button-container">
-                    <Button className="button-start" label={isRunning ? "Pause" : "Start"} onClick={startPauseTimer} />
+                    <Button className="button-start" label={isRunning ? "Pause" : "Start"} icon={isRunning ? faPause : faPlay} onClick={startPauseTimer} />
                 </div>
                 <div className="buttons-container">
-                    <Button className="button-reset" label="Reset" onClick={resetTimer} />
-                    <Button className="button-end" label="End" onClick={endTimer} />
+                    <Button className="button-reset" label="Reset" icon={faRedo} onClick={resetTimer} />
+                    <Button className="button-end" label="End" icon={faStepForward} onClick={endTimer} />
                 </div>
             </Panel>
         </div>

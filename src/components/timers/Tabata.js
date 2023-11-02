@@ -5,6 +5,8 @@ import Button from "../generic/Button.js";
 import DisplayTime from "../generic/DisplayTime.js";
 import DisplayRounds from "../generic/DisplayRounds.js";
 import { formatTime, displayInputTime } from "../../utils/helpers.js";
+import { faPlay, faPause, faRedo, faForward, faStepForward } from '@fortawesome/free-solid-svg-icons';
+
 
 const Tabata = () => {
     //define default values
@@ -94,11 +96,17 @@ const Tabata = () => {
     //handle changes in work time input
     const handleWorkTimeChange = (e) => {
         const value = e.target.value;
-        setInputWorkTime(value);
-        if (value === '') {
-            setRemainingTime(0);
-        } else {
-            setRemainingTime(parseTime(value));
+        const segments = value.split(':');
+        if (segments.length <= 2) {
+            const minSegment = segments[0];
+            const secSegment = segments[1] || '';
+            if (minSegment.length <= 2 && secSegment.length <= 2) {
+                setInputWorkTime(value);
+            }
+        }
+        //check if input is empty and default to '00:00'
+        else if (!value) {
+            setInputWorkTime('00:00');
         }
     };
 
@@ -135,12 +143,12 @@ const Tabata = () => {
             <DisplayRounds text={!isRunning && remainingTime === 0 ? `Total Rounds: ${parseInt(rounds, 10) || defaultRounds}` : isWorkTime ? `Round ${currentRound} of ${parseInt(rounds, 10) || defaultRounds}` : "Rest"} />
             <Panel className="control-panel">
                 <div className="start-button-container">
-                    <Button className="button-start" label={isRunning ? 'Pause' : 'Start'} onClick={startPauseTimer} />
+                    <Button className="button-start" label={isRunning ? "Pause" : "Start"} icon={isRunning ? faPause : faPlay} onClick={startPauseTimer} />
                 </div>
                 <div className="buttons-container">
-                    <Button className="button-reset" label="Reset" onClick={resetTimer} />
-                    <Button className="button-forward" label="Forward" onClick={fastForwardTimer} />
-                    <Button className="button-end" label="End" onClick={endTimer} />
+                    <Button className="button-reset" label="Reset" icon={faRedo} onClick={resetTimer} />
+                    <Button className="button-forward" label="Forward" icon={faForward} onClick={fastForwardTimer} />
+                    <Button className="button-end" label="End" icon={faStepForward} onClick={endTimer} />
                 </div>
             </Panel>
         </div>
