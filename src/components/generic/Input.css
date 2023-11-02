@@ -1,0 +1,36 @@
+input {
+    display: block;
+    background-color: #1f1f1f;
+    border: 1px solid #333;
+    padding: 8px 16px 8px 16px;
+    color: #f0f0f0;
+    border-radius: 8px;
+    margin: 4px;
+    font-size: 28px;
+    text-align: center;
+}
+
+.input-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: auto;
+    margin-bottom: 4px;
+}
+
+.input-label {
+    width: auto;
+    margin-right: 8px;
+    font-size: 14px;
+}
+
+.input-field {
+    width: 80px;
+}
+
+.explainer-text {
+    font-size: 0.8rem;
+    color: #666;
+    text-align: center;
+}
