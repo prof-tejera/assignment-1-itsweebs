@@ -110,7 +110,7 @@ const XY = () => {
             <DisplayTime>
                 {formatTime(time)}
             </DisplayTime>
-            <DisplayRounds text={`Round ${currentRound} of ${parseInt(rounds, 10) || defaultRounds}`} />
+            <DisplayRounds text={!isRunning && time === 0 && currentRound === (parseInt(rounds, 10) || defaultRounds) ? `Total Rounds: ${parseInt(rounds, 10) || defaultRounds}` : `Round ${currentRound} of ${parseInt(rounds, 10) || defaultRounds}`} />
             <Panel>
                 <Button label={isRunning ? 'Pause' : 'Start'} onClick={startPauseTimer} />
                 <Button label="Reset" onClick={resetTimer} />

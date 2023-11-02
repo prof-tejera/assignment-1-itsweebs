@@ -7,12 +7,17 @@ import DisplayRounds from "../generic/DisplayRounds.js";
 import { formatTime } from "../../utils/helpers.js";
 
 const Tabata = () => {
+    //define default values
+    const defaultWorkTime = 20;
+    const defaultRestTime = 10;
+    const defaultRounds = 8;
+
     //state to keep track of work time
-    const [workTime, setWorkTime] = useState(20);
+    const [workTime, setWorkTime] = useState(defaultWorkTime.toString());
     //state to keep track of rest time
-    const [restTime, setRestTime] = useState(10);
+    const [restTime, setRestTime] = useState(defaultRestTime.toString());
     //state to keep track of the total number of rounds
-    const [rounds, setRounds] = useState(8);
+    const [rounds, setRounds] = useState(defaultRounds.toString());
     //state to keep track of the current round
     const [currentRound, setCurrentRound] = useState(1);
     //state to determine if the timer is running
@@ -20,7 +25,7 @@ const Tabata = () => {
     //state to track whether it is work or rest time
     const [isWorkTime, setIsWorkTime] = useState(true);
     //state to keep track of the remaining time in the current interval
-    const [remainingTime, setRemainingTime] = useState(workTime);
+    const [remainingTime, setRemainingTime] = useState(defaultWorkTime);
 
     //handle timer logic
     useEffect(() => {
@@ -33,24 +38,24 @@ const Tabata = () => {
             }, 1000);
         }
         //if the timer is running but time ran out and there are more rounds to go, switch between work and rest times
-        else if (isRunning && remainingTime === 0 && currentRound < rounds) {
+        else if (isRunning && remainingTime === 0 && currentRound < parseInt(rounds, 10)) {
             if (isWorkTime) {
                 setIsWorkTime(false);
-                setRemainingTime(restTime);
+                setRemainingTime(parseInt(restTime, 10) || defaultRestTime);
             } else {
                 setIsWorkTime(true);
                 setCurrentRound((prevRound) => prevRound + 1);
-                setRemainingTime(workTime);
+                setRemainingTime(parseInt(workTime, 10) || defaultWorkTime);
             }
         }
         //if time runs out and all rounds are done, stop the timer
-        else if (remainingTime === 0 && currentRound === rounds) {
+        else if (remainingTime === 0 && currentRound === parseInt(rounds, 10)) {
             setIsRunning(false);
         }
 
         //clear the timer when the component unmounts or values change
         return () => clearInterval(interval);
-    }, [isRunning, remainingTime, currentRound, rounds, workTime, restTime, isWorkTime]);
+    }, [isRunning, remainingTime, currentRound, rounds, workTime, restTime, isWorkTime, defaultWorkTime, defaultRestTime]);
 
 
     //function to start or pause the timer
@@ -61,7 +66,7 @@ const Tabata = () => {
     //function to reset the timer
     const resetTimer = () => {
         setIsRunning(false);
-        setRemainingTime(workTime);
+        setRemainingTime(parseInt(workTime, 10) || defaultWorkTime);
         setCurrentRound(1);
         setIsWorkTime(true);
     };
@@ -69,45 +74,42 @@ const Tabata = () => {
     //function to fast forward to the end of the current interval
     const fastForwardTimer = () => {
         setRemainingTime(0);
-        if (isWorkTime && currentRound === rounds) {
+        if (isWorkTime && currentRound === parseInt(rounds, 10)) {
             setIsRunning(false);
         }
     };
 
     //function to end the timer
     const endTimer = () => {
-        setRemainingTime(0);
-        setCurrentRound(rounds);
         setIsRunning(false);
+        setRemainingTime(0);
+        setCurrentRound(parseInt(rounds, 10) || defaultRounds);
+        setIsWorkTime(false);
     };
 
     //handle changes in work time input
     const handleWorkTimeChange = (e) => {
-        const newValue = Math.max(1, parseInt(e.target.value, 10));
-        if (!isNaN(newValue)) {
-            setWorkTime(newValue);
-            if (isWorkTime) {
-                setRemainingTime(newValue);
-            }
+        const value = e.target.value;
+        setWorkTime(value);
+        if (value === '') {
+            setRemainingTime(0);
+        } else {
+            setRemainingTime(parseInt(value, 10) || defaultWorkTime);
         }
     };
 
     //handle changes in rest time input
     const handleRestTimeChange = (e) => {
-        const newValue = Math.max(1, parseInt(e.target.value, 10));
-        if (!isNaN(newValue)) {
-            setRestTime(newValue);
-            if (!isWorkTime) {
-                setRemainingTime(newValue);
-            }
-        }
+        const value = e.target.value;
+        setRestTime(value);
     };
 
     //handle changes in rounds input
     const handleRoundsChange = (e) => {
-        const newValue = Math.max(1, parseInt(e.target.value, 10));
-        if (!isNaN(newValue)) {
-            setRounds(newValue);
+        const value = e.target.value;
+        setRounds(value);
+        if (value === '') {
+            setCurrentRound(1);
         }
     };
 
@@ -122,7 +124,7 @@ const Tabata = () => {
             <DisplayTime>
                 {formatTime(remainingTime)}
             </DisplayTime>
-            <DisplayRounds text={isWorkTime ? `Round ${currentRound} of ${rounds}` : "Rest"} />
+            <DisplayRounds text={!isRunning && remainingTime === 0 ? `Total Rounds: ${parseInt(rounds, 10) || defaultRounds}` : isWorkTime ? `Round ${currentRound} of ${parseInt(rounds, 10) || defaultRounds}` : "Rest"} />
             <Panel>
                 <Button label={isRunning ? 'Pause' : 'Start'} onClick={startPauseTimer} />
                 <Button label="Reset" onClick={resetTimer} />
