@@ -1,8 +1,9 @@
 import React from 'react';
+import "./DisplayRounds.css";
 
-const DisplayRounds = ({ text }) => {
+const DisplayRounds = ({ text, ...props }) => {
   return (
-    <div>
+    <div className='display-rounds'>
       {text}
     </div>
   );

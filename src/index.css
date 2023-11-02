@@ -4,6 +4,13 @@ body {
   font-family: 'Poppins', sans-serif;
 }
 
+td,
+th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
 /* default styling provided
 
 body {
@@ -18,12 +25,5 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
-}
-
-td,
-th {
-  border: 1px solid #dddddd;
-  text-align: left;
-  padding: 8px;
 }
 */

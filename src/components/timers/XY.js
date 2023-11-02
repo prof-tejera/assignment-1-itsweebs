@@ -4,17 +4,17 @@ import Input from "../generic/Input.js";
 import Button from "../generic/Button.js";
 import DisplayTime from "../generic/DisplayTime.js";
 import DisplayRounds from "../generic/DisplayRounds.js";
-import { formatTime } from "../../utils/helpers.js";
+import { formatTime, displayInputTime } from "../../utils/helpers.js";
 
 const XY = () => {
     //define default values
-    const defaultMinutes = 1;
+    const defaultTime = 90;
     const defaultRounds = 10;
 
     //state to keep track of time in seconds
-    const [time, setTime] = useState(defaultMinutes * 60);
-    //state to keep track of user input in minutes
-    const [minutes, setMinutes] = useState(defaultMinutes.toString());
+    const [time, setTime] = useState(defaultTime);
+    //state to keep track of user input in MM:SS format
+    const [inputTime, setInputTime] = useState('01:30');
     //state to keep track of the total number of rounds
     const [rounds, setRounds] = useState(defaultRounds.toString());
     //state to keep track of the current round
@@ -38,7 +38,7 @@ const XY = () => {
             const totalRounds = parseInt(rounds, 10) || defaultRounds;
             if (nextRound <= totalRounds) {
                 setCurrentRound(nextRound);
-                setTime((parseInt(minutes, 10) || defaultMinutes) * 60);
+                setTime(parseTime(inputTime) || defaultTime);
             } else {
                 setIsRunning(false);
             }
@@ -46,12 +46,12 @@ const XY = () => {
 
         //clear the interval when the component unmounts or timer stops
         return () => clearInterval(interval);
-    }, [isRunning, time, currentRound, rounds, minutes, defaultMinutes, defaultRounds]);
+    }, [isRunning, time, currentRound, rounds, inputTime, defaultTime, defaultRounds]);
 
     //function to start or pause the timer
     const startPauseTimer = () => {
         if (!isRunning && time === 0 && currentRound === (parseInt(rounds, 10) || defaultRounds)) {
-            setTime((parseInt(minutes, 10) || defaultMinutes) * 60);
+            setTime(parseTime(inputTime) || defaultTime);
             setCurrentRound(1);
         }
         setIsRunning(!isRunning);
@@ -60,7 +60,7 @@ const XY = () => {
     //function to reset the timer
     const resetTimer = () => {
         setIsRunning(false);
-        setTime((parseInt(minutes, 10) || defaultMinutes) * 60);
+        setTime(parseTime(inputTime) || defaultTime);
         setCurrentRound(1);
     };
 
@@ -80,14 +80,20 @@ const XY = () => {
         setIsRunning(false);
     };
 
-    //handle changes in X input (minutes)
-    const handleMinutesChange = (e) => {
+    //function to parse MM:SS time format to seconds
+    const parseTime = (input) => {
+        const [minutes = '0', seconds = '0'] = input.split(':');
+        return parseInt(minutes, 10) * 60 + parseInt(seconds, 10);
+    };
+
+    //handle changes in X input
+    const handleTimeChange = (e) => {
         const value = e.target.value;
-        setMinutes(value);
+        setInputTime(value);
         if (value === '') {
             setTime(0);
         } else {
-            setTime(parseInt(value, 10) * 60);
+            setTime(parseTime(value));
         }
     };
 
@@ -104,18 +110,25 @@ const XY = () => {
     return (
         <div>
             <Panel>
-                <Input label="Set minutes" value={minutes} onChange={handleMinutesChange} />
-                <Input label="Set rounds" value={rounds} onChange={handleRoundsChange} />
+                <Input label="Set Time" value={inputTime} onChange={handleTimeChange} />
+                <Input label="Set Rounds" value={rounds} onChange={handleRoundsChange} />
+                <div className="explainer-text">
+                    {`${displayInputTime(inputTime)} for ${rounds} Rounds`}
+                </div>
             </Panel>
             <DisplayTime>
                 {formatTime(time)}
             </DisplayTime>
             <DisplayRounds text={!isRunning && time === 0 && currentRound === (parseInt(rounds, 10) || defaultRounds) ? `Total Rounds: ${parseInt(rounds, 10) || defaultRounds}` : `Round ${currentRound} of ${parseInt(rounds, 10) || defaultRounds}`} />
-            <Panel>
-                <Button label={isRunning ? 'Pause' : 'Start'} onClick={startPauseTimer} />
-                <Button label="Reset" onClick={resetTimer} />
-                <Button label="Fast Forward" onClick={fastForwardTimer} />
-                <Button label="End" onClick={endTimer} />
+            <Panel className="control-panel">
+                <div className="start-button-container">
+                    <Button className="button-start" label={isRunning ? 'Pause' : 'Start'} onClick={startPauseTimer} />
+                </div>
+                <div className="buttons-container">
+                    <Button className="button-reset" label="Reset" onClick={resetTimer} />
+                    <Button className="button-forward" label="Forward" onClick={fastForwardTimer} />
+                    <Button className="button-end" label="End" onClick={endTimer} />
+                </div>
             </Panel>
         </div>
     );

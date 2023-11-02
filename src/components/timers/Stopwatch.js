@@ -3,25 +3,25 @@ import Panel from "../generic/Panel.js";
 import Input from "../generic/Input.js";
 import Button from "../generic/Button.js";
 import DisplayTime from "../generic/DisplayTime.js";
-import { formatTime } from "../../utils/helpers.js";
+import { formatTime, displayInputTime } from "../../utils/helpers.js";
 
 const Stopwatch = () => {
     //state to keep track of time
     const [time, setTime] = useState(0);
     //state to determine if timer is running
     const [isRunning, setIsRunning] = useState(false);
-    //state to store user input for minutes
-    const [inputMinutes, setInputMinutes] = useState('2');
-    //state to store user input for seconds
-    const [inputSeconds, setInputSeconds] = useState('30');
+    //state to store user input in combined minutes and seconds as MM:SS format
+    const [inputTime, setInputTime] = useState('02:30');
     //state to keep track of the target time in seconds
     const [targetTime, setTargetTime] = useState(150); //default 2m 30s
 
-    //update targetTime when user inputs change
+    //update targetTime when user inputTime changes
     useEffect(() => {
-        const newTargetTime = parseInt(inputMinutes, 10) * 60 + parseInt(inputSeconds, 10) || 0;
+        //split inputTime into minutes and seconds, then calculate the new target time in seconds
+        const [minutes, seconds] = inputTime.split(':').map(val => parseInt(val, 10));
+        const newTargetTime = (minutes * 60 + seconds) || 0;
         setTargetTime(newTargetTime);
-    }, [inputMinutes, inputSeconds]);
+    }, [inputTime]);
 
     //handle stopwatch logic
     useEffect(() => {
@@ -42,8 +42,8 @@ const Stopwatch = () => {
     }, [isRunning, time, targetTime]);
 
     //function to handle input changes
-    const handleInputChange = (setter) => (e) => {
-        setter(e.target.value);
+    const handleInputChange = (e) => {
+        setInputTime(e.target.value);
     };
 
     //function to start or pause the timer
@@ -67,16 +67,23 @@ const Stopwatch = () => {
     return (
         <div>
             <Panel>
-                <Input label="Set Minutes" value={inputMinutes} onChange={handleInputChange(setInputMinutes)} />
-                <Input label="Set Seconds" value={inputSeconds} onChange={handleInputChange(setInputSeconds)} />
+                <Input label="Set Time" value={inputTime} onChange={handleInputChange} />
+                <div className="explainer-text">
+                    {displayInputTime(inputTime)}
+                </div>
             </Panel>
             <DisplayTime>
                 {formatTime(time)}
             </DisplayTime>
-            <Panel>
-                <Button label={isRunning ? "Pause" : "Start"} onClick={startPauseTimer} />
-                <Button label="Reset" onClick={resetTimer} />
-                <Button label="End" onClick={endTimer} />
+            <Panel className="control-panel">
+                <div className="start-button-container">
+                    <Button className="button-start" label={isRunning ? "Pause" : "Start"} onClick={startPauseTimer} />
+                </div>
+                <div className="buttons-container">
+                    <Button className="button-reset" label="Reset" onClick={resetTimer} />
+                    <Button className="button-end" label="End" onClick={endTimer} />
+                </div>
+
             </Panel>
         </div>
     );

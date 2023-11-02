@@ -1,15 +1,17 @@
 input {
+    display: block;
     background-color: #111;
     border: 1px solid #333;
-    padding: 8px;
-    color: #FFF;
+    padding: 8px 16px 8px 16px;
+    color: #f0f0f0;
     border-radius: 8px;
     margin: 4px;
-    font-size: 16px;
+    font-size: 32px;
 }
 
 .input-container {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     align-items: center;
     width: auto;
@@ -23,4 +25,10 @@ input {
 
 .input-field {
     width: 80px;
+}
+
+.explainer-text {
+    font-size: 0.8rem;
+    color: #666;
+    text-align: center;
 }
